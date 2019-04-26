@@ -1,59 +1,62 @@
-//import javafx.application.Application;
-//import javafx.fxml.FXMLLoader;
-//import javafx.stage.*;
-//import javafx.scene.*;
-//import javafx.scene.image.Image;
-//import javafx.scene.control.*;
 
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
 
-public class Server /*extends Application*/ {
+public class Server {
 
 	//---------------------------------------Variables------------------------------------------------------------
     
-	   public static ArrayList<Player> player = new ArrayList();
+	public static ArrayList<Player> player = new ArrayList();
 	   
-	   public static int turn = 1;
+	public static int turn = 1;
 	   
-	   public static int pot = 0;
+	public static int pot = 0;
 	   
-	   public static boolean defaultWin = false;
+	public static boolean defaultWin = false;
 	   
-	   public static int lastBet = 0;
+	public static int lastBet = 0;
 	   
-	   public static int foldCount = 0;
+	public static int foldCount = 0;
 	   
-	   public static PokerDeck deck = new PokerDeck();
-	   
-		public static Scanner s = new Scanner(System.in);
+	public static Scanner s = new Scanner(System.in);
 		
-		public static int currentPot = 0;
+	public static int currentPot = 0;
+	
+	public static Deck deck;
 		
 	//----------------------------------Individual Methods--------------------------------------------------------
 		
 		
 		public static void setup(ArrayList<String> names) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
 		
+			
+			DeckFactory df =  DeckFactory.getBuilder();
+			String deckClass = "Poker";
+			df.setClass(deckClass);
+			Deck deck = df.buildDeck();
+
+
+
+			
+			
+			
+			
+			
 			System.out.println("Initiated");
 			boolean condition = true;
 			deck.shuffle();
 			int playerNum = 1;
 	      
 			for(String n: names){
-	      		Player p1 = new Player();
-	      		p1.name = "Player 1:"+ n;
+	      		Player p1 = new Player(deck);
+	      		p1.name = n;
 	      		player.add(p1);
-	      		p1.fold();
 				System.out.println("P"+playerNum+ " Created");
 				playerNum++;
 			}
-	      	for(Player p: player) {
-				p.isActive = true;
-			}
-			createHands();
+			
 			System.out.println("Cleared Decks");
 			System.out.println("Created Player Hands");
 			System.out.println();
@@ -76,7 +79,7 @@ public class Server /*extends Application*/ {
 			}
 			foldCount = 0;
 
-			if(p.isActive == true && defaultWin == false) {
+			if(p.isActive == true ) {
 				
 				
 				System.out.println("Turn: "+ turn +"          Player: "+ p.name);
@@ -117,10 +120,15 @@ public class Server /*extends Application*/ {
 						p.fold();
 						System.out.println("You Fold");
 						break;
+						
+					default:
+
 					}
+
 				System.out.println();
 			}
 			//Check if any players folded one more time
+			System.out.println("Test");
 			for(Player c: player) {
 				if(c.isActive == false) {
 					foldCount++;
@@ -140,11 +148,13 @@ public class Server /*extends Application*/ {
 			int loop = 1;
 			String winner = "";
 			for(Player p: player) {
-				p.playerHand.setRanking();
+				if(p.isActive) {
+					p.playerHand.setRanking();
+				}
 			}
 			while(loop <= 2)
 				for(Player p: player) {
-					if(rank < p.playerHand.handRank) {
+					if(rank < p.playerHand.handRank && p.isActive) {
 						winner = p.name;
 						if(loop == 2 && winner == p.name) {
 							p.a.setBalance(p.a.getBalance() + pot);
@@ -160,7 +170,9 @@ public class Server /*extends Application*/ {
 			turn = 1;
 			for(Player p: player) {
 				p.isActive = true;
+				p.createHands(deck);
 			}
+			newDeck();
 			foldCount = 0;
 			defaultWin = false;
 			System.out.println("--------");
@@ -181,10 +193,12 @@ public class Server /*extends Application*/ {
 		pot = 0;
 		
 		turn = 1;
-		
-		createHands();
+		for(Player p: player) {
+			p.createHands(deck);
+		}
 		foldCount = 0;
 		defaultWin = false;
+		newDeck();
 		System.out.println("--------");
 		System.out.println("New Turn");
 		System.out.println("--------");
@@ -195,84 +209,7 @@ public class Server /*extends Application*/ {
 			deck = new PokerDeck();
 			deck.shuffle();
 		}
-		
-	// Creates hands for the list of players
-		public static void createHands() {
-			for(Player p: player) {
-			
-				p.fold();
-				ArrayList<Card> cards = new ArrayList<Card>();
-				int i = 0; 
-				while(i<5) {
-					cards.add(deck.draw());
-					i++;
-			}
-			p.playerHand.addToHand(cards);
-			p.isActive = true;
-		}
-	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-    //Parent loginScreen = null;
-    LoginFormValidation loginFormValidation = null;
-
-    //@Override
-    /*public void start(Stage primaryStage) throws Exception {
-
-        // Load XML file for player login
-        try {
-            loginScreen = FXMLLoader.load(getClass().getResource("resources/Login.fxml"));
-        } catch(NullPointerException e){
-
-            System.out.println("Invalid XML Filename!");
-            System.out.println(e.getMessage());
-            System.exit(1);
-        }
-
-        // Set up the stage
-        primaryStage.getIcons().add(new Image("images/icon.png"));
-        primaryStage.setTitle("Game Login");
-        primaryStage.setScene(new Scene(loginScreen));
-
-        // Grab the button objects (since generated through xml)
-        Button exitButton = (Button) primaryStage.getScene().lookup("#exitButton");
-        Button joinButton = (Button) primaryStage.getScene().lookup("#joinButton");
-
-        // Join Button Handler
-            joinButton.setOnAction(e->  {
-            loginFormValidation = new LoginFormValidation(primaryStage.getScene());
-            if(loginFormValidation.validate()){
-                for(int i = 0; i < 5; i++){
-                    System.out.print(loginFormValidation.names[i] + "\t");
-                }
-                System.out.print("\n");
-                primaryStage.hide();
-
-            }
-        });
-
-        // Exit Button Handler
-        exitButton.setOnAction(e->System.exit(0));
-
-        // Show Stage
-        primaryStage.show();
-
-    }*/
-
-
     public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
         run();
     }
