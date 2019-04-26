@@ -1,6 +1,9 @@
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -10,7 +13,12 @@ public class PlayerView {
 
     Scene loginScreen = null;
     Scene gameScreen = null;
+    LoginFormValidation lfv;
+    GameFormValidation gfv;
+
     ArrayList<ImageView> imageViews = new ArrayList<>();
+
+    Button exitButton, joinButton, foldButton, callButton, betButton;
 
     boolean loadResources() throws Exception{
 
@@ -20,11 +28,28 @@ public class PlayerView {
             loginScreen = new Scene(FXMLLoader.load(getClass().getResource("resources/Login.fxml")));
             gameScreen = new Scene(FXMLLoader.load(getClass().getResource("resources/Game.fxml")));
 
+            lfv = new LoginFormValidation(loginScreen);
+            gfv = new GameFormValidation(gameScreen);
             String[] imageViewNames = {"card0View","card1View","card2View","card3View","card4View","card5View"};
 
             for(int i = 0; i < imageViewNames.length; i++){
                 imageViews.add((ImageView) gameScreen.lookup("#"+imageViewNames[i]));
             }
+
+            // Extract buttons from template
+            exitButton = (Button) loginScreen.lookup("#exitButton");
+            joinButton = (Button) loginScreen.lookup("#joinButton");
+            betButton = (Button) gameScreen.lookup("#betButton");
+            foldButton = (Button) gameScreen.lookup("#foldButton");
+            callButton = (Button) gameScreen.lookup("#callButton");
+
+            // Set up button handlers
+            exitButton.setOnAction(e->System.exit(0));
+            joinButton.setOnAction(e->lfv.validate());
+            betButton.setOnAction(e->gfv.buttonPressed("bet"));
+            foldButton.setOnAction(e->gfv.buttonPressed("fold"));
+            callButton.setOnAction(e->gfv.buttonPressed("call"));
+
 
             return true;
 
