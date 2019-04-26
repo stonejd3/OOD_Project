@@ -1,6 +1,5 @@
 public class Card {
     public Card.Suit suit;
-    private Card.Color color;
     public String name;
     public int value;
     
@@ -14,12 +13,6 @@ public class Card {
         name = newName;
         value = newValue;
         suit = newSuit;
-    }
-    
-    public Card(String newName, int newValue, Color newColor){
-        name = newName;
-        value = newValue;
-        color = newColor;
     }
     
     //the classes below are meant to test the creation of 
