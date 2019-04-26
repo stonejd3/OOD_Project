@@ -1,3 +1,5 @@
+package a;
+
 import java.util.ArrayList;
 import java.util.Observer;
 
@@ -6,56 +8,58 @@ public class Player  {
 	public PlayerObservable playerObserable;
 	AccountFactory af = AccountFactory.getFactory();
 	Account a = af.getAccount();
-
+	
+	boolean validBet = true;
 	String state;
-	boolean isActive = true;
-	Hand playerHand;
+	static boolean isActive = true;
+	static Hand playerHand;
 
 	//fix the hand maker/populate later
-	public Player() throws InstantiationException, IllegalAccessException, ClassNotFoundException{
-		DeckFactory df =  DeckFactory.getBuilder();
-		String deckClass = "Poker";
-		df.setClass(deckClass);
-		Deck test = df.buildDeck();
-		playerHand = new Hand();
-		ArrayList<Card> checker = new ArrayList<Card>();
-		for(int i = 0; i < 5; i++){
-			checker.add(test.draw());
-		}
-
-		playerHand.addToHand(checker);
+	public Player(PokerDeck deck) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+		createHands(deck);
 
 	}
+	public static PokerDeck createHands(PokerDeck deck) {
+		isActive = true;
+		
+			fold();
+			ArrayList<Card> cards = new ArrayList<Card>();
+			
+				cards.add(deck.draw());
+			
+		
+		playerHand.addToHand(cards);
+		return deck;
+	}
 
-
-
-
-//	public void Bet(int currentPot) {
-//
-//		int newBalance = a.getBalance() - currentPot;
-//		a.setBalance(newBalance );
-//	}
 
 	public void raise(int currentPot,int raiseAmount) {
 		int newPot;
 		newPot = currentPot + raiseAmount;
-		//add server.setBalance to the 'currentpot'
+		
 		int newBalance = a.getBalance() - newPot;
 		if(newBalance < 0) {
-			//make so that the player can still raise,call, or fold through the GUI
+			validBet= false;
+			
 		}else {
 			a.setBalance(newBalance );
 
 		}
-		//update part that updates the pot amount with the raise amount
+		
 	}
 
 	public void call(int currentPot) {
 		int newBalance = a.getBalance() - currentPot;
-		a.setBalance(newBalance );
+		if(newBalance < 0) {
+			newBalance = 0;
+			a.setBalance(newBalance);
+		}else {
+			a.setBalance(newBalance);
+
+		}
 	}
 
-	public void fold() {
+	public static void fold() {
 		isActive = false;
 		playerHand.hand.clear();
 		//empty out hand
