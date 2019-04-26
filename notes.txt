@@ -1,0 +1,80 @@
+Server {
+
+    // Class members
+    Deck deck
+    ArrayList<Player> players
+    Account
+    Hand winningHand
+    Ranker
+
+    // Class
+    +getPlayers():
+    +getWinner()
+    +getPot
+    +reset()
+
+}
+
+Player {
+
+    PlayerScene;
+    Account
+    Hand
+
+}
+
+Main {
+
+    Parent loginScreen;
+    Player currentPlayer
+    LoginFormValidation lfv;
+
+    start(Stage primaryStage){
+        loginScene = getFXMLResource();
+        names = lfv.getNames();
+        s = new Server(3); // sets number of players
+        for(Player p: s.getPlayers()){
+            p.name = list[i];
+            p.cards = server.deal();
+        }
+
+        // three rounds of betting
+        for(i = 1 to 3){ // 3 iterations
+
+            for(Player p: s.getPlayers()){
+                if(p.isActive){
+                while(true){
+                                if(p.gui.getState() != null){
+                            p.state = p.gui.getState();
+                            break;
+                        }
+
+                    }
+                }
+
+
+                if(p.state == "check"){
+                   // continue
+                } elseif(p.state == fold){
+                   p.isActive = false;
+                } else{
+                   // betblahblah
+                }
+
+            }
+
+        }
+
+        winningHand = server.getWinningHand();
+        winningPlayer.account.add(server.getPot());
+
+
+
+
+
+    }
+}
+
+Pot Value:
+Player Name:
+Player Account Balance:
