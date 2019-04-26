@@ -3,7 +3,7 @@ public class Ranker
 {
     // instance variables - replace the example below with your own
     public ArrayList<Card> hand;
-    int rank;
+    public int rank;
     int highPair;
     boolean flush=true; //assume there is a flush
     boolean royality=false;
