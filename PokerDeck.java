@@ -40,4 +40,8 @@ public class PokerDeck implements Deck
     public Card draw(){
         return deck.remove(0);
     }
+    
+    public Card drawTester(int i){	
+        return deck.remove(i);	
+    }
 }
