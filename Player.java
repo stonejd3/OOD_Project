@@ -1,4 +1,3 @@
-package a;
 
 import java.util.ArrayList;
 import java.util.Observer;
@@ -15,20 +14,24 @@ public class Player  {
 	static Hand playerHand;
 
 	//fix the hand maker/populate later
-	public Player(PokerDeck deck) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+	public Player(Deck deck) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+		playerHand = new Hand();
 		createHands(deck);
-
 	}
-	public static PokerDeck createHands(PokerDeck deck) {
+	public static Deck createHands(Deck deck) {
+		
+		//if(playerHand.hand.size() != 0) {
+		//	fold();
+		//}
+		ArrayList<Card> cards = new ArrayList<Card>();
+		int i = 0; 
+		while(i<5) {
+			cards.add(deck.draw());
+			i++;
+		}
+		playerHand.addToHand(cards);
 		isActive = true;
 		
-			fold();
-			ArrayList<Card> cards = new ArrayList<Card>();
-			
-				cards.add(deck.draw());
-			
-		
-		playerHand.addToHand(cards);
 		return deck;
 	}
 
