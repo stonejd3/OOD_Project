@@ -10,18 +10,18 @@ public class Player  {
 	
 	boolean validBet = true;
 	String state;
-	static boolean isActive = true;
-	static Hand playerHand;
+	boolean isActive = true;
+	Hand playerHand;
 
 	//fix the hand maker/populate later
-	public Player(Deck deck) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+	public Player() throws InstantiationException, IllegalAccessException, ClassNotFoundException{
 		playerHand = new Hand();
-		createHands(deck);
+		//createHands(deck);
 	}
-	public static Deck createHands(Deck deck) {
+	/*public static Deck createHands(Deck deck) {
 		
 		//if(playerHand.hand.size() != 0) {
-		//	fold();
+			fold();
 		//}
 		ArrayList<Card> cards = new ArrayList<Card>();
 		int i = 0; 
@@ -30,11 +30,11 @@ public class Player  {
 			i++;
 		}
 		playerHand.addToHand(cards);
-		isActive = true;
+		//isActive = true;
 		
 		return deck;
 	}
-
+*/
 
 	public void raise(int currentPot,int raiseAmount) {
 		int newPot;
@@ -62,13 +62,13 @@ public class Player  {
 		}
 	}
 
-	public static void fold() {
-		isActive = false;
+	public void fold() {
+		//isActive = false;
 		playerHand.hand.clear();
 		//empty out hand
 	}
 	//------------------------------------------------------------
-
+	
 	public void addObserver(Observer o){
 		playerObserable.addObserver(o);
 		// Give the new observer current state

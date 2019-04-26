@@ -35,10 +35,10 @@ public class Server {
 			DeckFactory df =  DeckFactory.getBuilder();
 			String deckClass = "Poker";
 			df.setClass(deckClass);
-			Deck deck = df.buildDeck();
+			deck = df.buildDeck();
 
 
-
+			
 			
 			
 			
@@ -50,12 +50,13 @@ public class Server {
 			int playerNum = 1;
 	      
 			for(String n: names){
-	      		Player p1 = new Player(deck);
+	      		Player p1 = new Player();
 	      		p1.name = n;
 	      		player.add(p1);
 				System.out.println("P"+playerNum+ " Created");
 				playerNum++;
 			}
+			createHands();
 			
 			System.out.println("Cleared Decks");
 			System.out.println("Created Player Hands");
@@ -118,6 +119,7 @@ public class Server {
 						
 					case 3: 
 						p.fold();
+						p.isActive = false;
 						System.out.println("You Fold");
 						break;
 						
@@ -158,7 +160,7 @@ public class Server {
 						winner = p.name;
 						if(loop == 2 && winner == p.name) {
 							p.a.setBalance(p.a.getBalance() + pot);
-							System.out.println("Winner is ...");
+							System.out.println("Winner is "+ p.name);
 						}
 					}
 				
@@ -170,8 +172,9 @@ public class Server {
 			turn = 1;
 			for(Player p: player) {
 				p.isActive = true;
-				p.createHands(deck);
+				
 			}
+			createHands();
 			newDeck();
 			foldCount = 0;
 			defaultWin = false;
@@ -193,9 +196,7 @@ public class Server {
 		pot = 0;
 		
 		turn = 1;
-		for(Player p: player) {
-			p.createHands(deck);
-		}
+		createHands();
 		foldCount = 0;
 		defaultWin = false;
 		newDeck();
@@ -208,6 +209,20 @@ public class Server {
 		public static void newDeck() {
 			deck = new PokerDeck();
 			deck.shuffle();
+		}
+		public static void createHands() {
+			
+			for(Player p: player) {	
+				ArrayList<Card> cards = new ArrayList<Card>();
+				int i = 0; 
+				while(i<5) {
+					cards.add(deck.draw());
+					i++;
+				}
+				p.playerHand.addToHand(cards);
+				p.isActive = true;
+			}
+		
 		}
 	
     public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
