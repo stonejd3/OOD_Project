@@ -49,6 +49,14 @@ public class Ranker
                 straight=false;
             }
         }
+        if(hand.get(4).value == 11 && hand.get(0).value ==2){	
+            straight=true;	
+            for (int x=1; x<3; x++){	
+                if( (hand.get(x).value + 1) != hand.get(x+1).value ){	
+                    straight=false;	
+                } 	
+            }
+        }
     }
     
     void ofAKind(){
@@ -59,7 +67,9 @@ public class Ranker
             if( checkCard.name == hand.get(x).name ){
                 currentPair++;
             } else {
-                highestPair = currentPair;
+                if(currentPair>highestPair){
+                    highestPair = currentPair;	
+                }
                 currentPair = 1;
                 checkCard= hand.get(x);
             }
