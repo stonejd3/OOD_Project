@@ -4,4 +4,5 @@ public interface Deck {
     void readThrough();
     void shuffle();
     Card draw();
+    Card drawTester(int i);
 }
