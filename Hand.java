@@ -18,14 +18,15 @@ public class Hand{
 
     void sortHand(){
         for(int x = 0; x< hand.size(); x++){
-            for(int y = 0; y < (hand.size()-1); y++){
-                if (hand.get(y).value > hand.get(y+1).value){
+            for(int y = 0; y < (hand.size()-1); y++
+                if (hand.get(y).value > hand.get(y+1).value
                 || (hand.get(y).name =="Jack" && hand.get(y+1).name =="Ten")	
                 || (hand.get(y).name =="Queen" && hand.get(y+1).name =="Ten")	
                 || (hand.get(y).name =="King" && hand.get(y+1).name =="Ten")	
                 || (hand.get(y).name =="Queen" && hand.get(y+1).name =="Jack")	
                 || (hand.get(y).name =="King" && hand.get(y+1).name =="Jack")	
-                || (hand.get(y).name =="King" && hand.get(y+1).name =="Queen"){
+                || (hand.get(y).name =="King" && hand.get(y+1).name =="Queen")
+                ){
                     Collections.swap(hand, y, y+1);
                 }
             }
