@@ -1,15 +1,23 @@
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
-
 import java.util.ArrayList;
+import java.util.Observable;
 
-public class LoginFormValidation implements FormValidation {
+public class LoginFormValidation extends Observable implements FormValidation {
 
     String[] inputs = {"#p1Name","#p2Name","#p3Name","#p4Name","#p5Name"};
     String[] names = new String[5];
 
     ArrayList<TextField> textFields = new ArrayList<>();
     Scene scene = null;
+
+    public void setChanged(){
+        super.setChanged();
+    }
+
+    public void clearChanged(){
+        super.clearChanged();
+    }
 
     public LoginFormValidation(Scene s){
         this.scene = s;
@@ -34,6 +42,13 @@ public class LoginFormValidation implements FormValidation {
                 counter++;
             }
         }
+
+        if(counter >=2){
+            this.setChanged();
+            this.notifyObservers(names);
+        }
+
+
         return counter >= 2;
     }
 
