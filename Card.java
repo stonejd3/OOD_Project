@@ -5,11 +5,9 @@ public class Card {
     public int value;
     
     private boolean drawn;
-    public static enum Suit {
-        Heart, Diamond, Spade, Club;
-    }
-    public static enum Color {
-        Red, Yellow, Green, Blue;
+   public static enum Suit {
+        Heart, Diamond, Spade, Club,
+        Cup, Coin, Sword, SClub;
     }
     
     public Card(String newName, int newValue, Suit newSuit){
