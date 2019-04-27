@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 
@@ -19,6 +20,7 @@ public class PlayerView {
     ArrayList<ImageView> imageViews = new ArrayList<>();
 
     Button exitButton, joinButton, foldButton, callButton, betButton;
+    Text playerName, accountBalance;
 
     boolean loadResources() throws Exception{
 
@@ -42,6 +44,8 @@ public class PlayerView {
             betButton = (Button) gameScreen.lookup("#betButton");
             foldButton = (Button) gameScreen.lookup("#foldButton");
             callButton = (Button) gameScreen.lookup("#callButton");
+            playerName = (Text) gameScreen.lookup("#playerName");
+            accountBalance = (Text) gameScreen.lookup("#accountBalance");
 
             // Set up button handlers
             exitButton.setOnAction(e->System.exit(0));
@@ -49,7 +53,6 @@ public class PlayerView {
             betButton.setOnAction(e->gfv.buttonPressed("bet"));
             foldButton.setOnAction(e->gfv.buttonPressed("fold"));
             callButton.setOnAction(e->gfv.buttonPressed("call"));
-
 
             return true;
 
@@ -69,10 +72,10 @@ public class PlayerView {
         return (viewName == "login")? loginScreen : gameScreen;
     }
 
-    void setCards(Hand h){
+    void setCards(Player p){
 
         int i = 0;
-        for(Card c : h.hand) {
+        for(Card c : p.playerHand.hand) {
             String str = "images/" + c.suit.toString().toUpperCase() + "_" + c.name.toUpperCase() + ".PNG";
             //ImageView temp = new ImageView();
             //temp.setImage(new Image(str));
@@ -84,6 +87,10 @@ public class PlayerView {
 
     }
 
+    void setPlayerInfo(Player p){
+        playerName.setText("Name:\t" + p.name);
+        accountBalance.setText("Account Balance:\t$"+Integer.toString(p.a.getBalance()));
+    }
 
 
 }

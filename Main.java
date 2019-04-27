@@ -9,6 +9,7 @@ import java.util.Observer;
 public class Main extends Application implements Observer {
 
     PlayerView pv;
+    Server server;
     ArrayList<String> names = new ArrayList<>();
 
     public void update(Observable observable, Object o){
@@ -16,7 +17,16 @@ public class Main extends Application implements Observer {
             if (o instanceof String[]) {
                 String[] s = (String[]) o;
                 for (int i = 0; i < s.length; i++)
+                    if(s[i] != null){
                         names.add(s[i]);
+                    }
+                try {
+                    server = new Server(names);
+                    server.run();
+                } catch(Exception e){
+                    System.out.println(e.getMessage());
+                }
+
 
                 System.out.print("\n");
             }
@@ -41,10 +51,12 @@ public class Main extends Application implements Observer {
         pv.lfv.addObserver(this);
         pv.gfv.addObserver(this);
 
+
         // Set up the stage
         primaryStage.getIcons().add(new Image("images/icon.png"));
         primaryStage.setTitle("Game Login");
-        primaryStage.setScene(pv.getView("game"));
+        primaryStage.setScene(pv.getView("login"));
+
         primaryStage.show();
     }
 
