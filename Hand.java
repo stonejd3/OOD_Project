@@ -39,7 +39,7 @@ public class Hand{
         handRank = tester.rank;
     }
     
-    public void readThrough(){//created only to test
+    public void readThrough(){ //created only to test
         for(int i = 0; i < hand.size(); i++){
             System.out.println(hand.get(i).showPokercard());
         }
