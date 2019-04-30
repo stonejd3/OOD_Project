@@ -4,6 +4,7 @@ public class Account {
 
     private int id;
     private int balance;
+    private int betAmount;
     public ObservableAccount observableAccount;
 
     public Account(int id, int balance){
@@ -25,6 +26,14 @@ public class Account {
 
     public void setBalance(int balance) {
         this.balance = balance;
+    }
+    
+    public int getbetAmount() {
+        return betAmount;
+    }
+
+    public void setbetAmount(int betAmount) {
+        this.betAmount = betAmount;
     }
 
     public String toString(){

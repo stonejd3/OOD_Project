@@ -5,272 +5,319 @@ import java.util.Scanner;
 
 public class Server {
 
-    //---------------------------------------Variables------------------------------------------------------------
-
-    public ArrayList<Player> player = new ArrayList();
-
-    public int turn = 1;
-
-    public int pot = 0;
-
-    public boolean defaultWin = false;
-
-    public int lastBet = 0;
-
-    public int foldCount = 0;
-
-    public Scanner s = new Scanner(System.in);
-
-    public int currentPot = 0;
-
-    public Deck deck;
-
-    //----------------------------------Individual Methods--------------------------------------------------------
-
-
-    public Server(ArrayList<String> names) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
-
-
-        DeckFactory df =  DeckFactory.getBuilder();
-        String deckClass = "Poker";
-        df.setClass(deckClass);
-        deck = df.buildDeck();
-
-
-
-
-
-
-
-
-        System.out.println("Initiated");
-        boolean condition = true;
-        deck.shuffle();
-        int playerNum = 1;
-
-        for(String n: names){
-            Player p1 = new Player();
-            p1.name = n;
-            player.add(p1);
-            System.out.println("P"+playerNum+ " Created");
-            playerNum++;
-        }
-        createHands();
-
-        System.out.println("Cleared Decks");
-        System.out.println("Created Player Hands");
-        System.out.println();
-        System.out.println("----------");
-        System.out.println("Begin Game");
-        System.out.println("----------");
-
-    }
-
-    //Process round for each player per turn
-    public void processRound(Player p) {
-        for(Player c: player) {
-            if(c.isActive == false) {
-                foldCount++;
-            }
-        }
-        if(foldCount == player.size()-1 ) {
-            defaultWin = true;
-            defaultWinner();
-        }
-        foldCount = 0;
-
-        if(p.isActive == true ) {
-
-
-            System.out.println("Turn: "+ turn +"          Player: "+ p.name);
-            System.out.println("Account: $"+ p.a.getBalance() + "                Pot: $"+ pot );
-            System.out.println();
-            System.out.println("Your cards:");
-            p.playerHand.readThrough();
-            if(turn == 1 && pot == 0) {
-                System.out.println("Options:(1)Bet  (3)Fold");
-            }else {
-                System.out.println("Options:(1)Bet  (2)Call  (3)Fold");
-            }
-            int r = s.nextInt();
-            switch(r) {
-                case 1:
-                    if(p.validBet == true) {
-                        p.raise(currentPot, 5);
-                        currentPot+=5;
-                        System.out.println("You bet $"+ 5);
-                        pot += currentPot;
-                    }
-                    break;
-
-                case 2:
-                    if(currentPot == 0) {
-                        System.out.println("You check");
-
-                    }else if(p.validBet == true) {
-                        p.call(currentPot);
-                        pot += 5;
-                        System.out.println("You call $"+ currentPot);
-                        currentPot += 5;
-
-                    }
-                    break;
-
-                case 3:
-                    p.fold();
-                    p.isActive = false;
-                    System.out.println("You Fold");
-                    break;
-
-                default:
-
-            }
-
-            System.out.println();
-        }
-        //Check if any players folded one more time
-        System.out.println("Test");
-        for(Player c: player) {
-            if(c.isActive == false) {
-                foldCount++;
-            }
-        }
-        if(foldCount == player.size()-1) {
-            defaultWin = true;
-            defaultWinner();
-        }
-        foldCount = 0;
-
-    }
-
-    // Checks the card ranks and determines the winner
-    public void determineWinner(){
-        int rank = 0;
-        int loop = 1;
-        String winner = "";
-        for(Player p: player) {
-            if(p.isActive) {
-                p.playerHand.setRanking();
-            }
-        }
-        while(loop <= 2)
-            for(Player p: player) {
-                if(rank < p.playerHand.handRank && p.isActive) {
-                    winner = p.name;
-                    if(loop == 2 && winner == p.name) {
-                        p.a.setBalance(p.a.getBalance() + pot);
-                        System.out.println("Winner is "+ p.name);
-                    }
-                }
-
-
-            }
-        pot = 0;
-
-
-        turn = 1;
-        for(Player p: player) {
-            p.isActive = true;
-
-        }
-        createHands();
-        newDeck();
-        foldCount = 0;
-        defaultWin = false;
-        System.out.println("--------");
-        System.out.println("New Turn");
-        System.out.println("--------");
-
-    }
-
-    //If all other players fold, the default winner wins the pot
-    public void defaultWinner() {
-        for(Player p: player) {
-            for(Player c: player) {
-                if(c.isActive == false && p.isActive == true ) {
-                    p.a.setBalance(p.a.getBalance() + pot);
-                }
-            }
-        }
-        pot = 0;
-
-        turn = 1;
-        createHands();
-        foldCount = 0;
-        defaultWin = false;
-        newDeck();
-        System.out.println("--------");
-        System.out.println("New Turn");
-        System.out.println("--------");
-    }
-
-    // Creates a new deck for the game when cards run low
-    public void newDeck() {
-        deck = new PokerDeck();
-        deck.shuffle();
-    }
-    public void createHands() {
-
-        for (Player p : player) {
-            ArrayList<Card> cards = new ArrayList<Card>();
-            int i = 0;
-            while (i < 5) {
-                cards.add(deck.draw());
-                i++;
-            }
-            p.playerHand.addToHand(cards);
-            p.isActive = true;
-        }
-
-    }
-
-    public void run() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-
-        ArrayList<String> names = new ArrayList();
-        boolean condition = true;
-
-        names.add("John");
-        names.add("James");
-        names.add("Jane");
-
-        //setup(names);
-
-        defaultWin = false;
-        while(condition == true) {
-            while(turn <= 3) {
-                for(Player p: player) {
-                    //--------------If all other players fold, default winner-----------------------------
-                    // Start New Round
-                    processRound(p);
-
-                }
-                currentPot = 0;
-                turn++;
-                if(turn > 3 && defaultWin == false) {
-
-                    determineWinner();
-                    turn = 1;
-                }else if(defaultWin == true) {
-                    defaultWinner();
-                }
-
-            }
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
+	//---------------------------------------Variables------------------------------------------------------------
+    
+	public ArrayList<Player> player = new ArrayList();
+	   
+	public int turn = 1;
+	
+	public int round = 1;
+	   
+	public int pot = 0;
+	   
+	public boolean defaultWin = false;
+	   
+	public int lastBet = 0;
+	   
+	public int foldCount = 0;
+	
+	public boolean gameover = false;
+	   
+	public Scanner s = new Scanner(System.in);
+		
+	public int currentPot = 0;
+	
+	public Deck deck;
+	
+	public int currentCallAmount = 0;
+	
+		
+	//----------------------------------Individual Methods--------------------------------------------------------
+		
+		
+		public Server(ArrayList<String> names) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+		
+			
+			DeckFactory df =  DeckFactory.getBuilder();
+			String deckClass = "Poker";
+			df.setClass(deckClass);
+			deck = df.buildDeck();
+
+			System.out.println("Initiated");
+			boolean condition = true;
+			deck.shuffle();
+			int playerNum = 1;
+	      
+			for(String n: names){
+	      		Player p1 = new Player();
+	      		p1.name = n;
+	      		player.add(p1);
+				System.out.println("P"+playerNum+ " Created");
+				playerNum++;
+			}
+			createHands();
+			
+			System.out.println("Cleared Decks");
+			System.out.println("Created Player Hands");
+			System.out.println();
+			System.out.println("----------");
+			System.out.println("Begin Game");
+			System.out.println("----------");
+				
+	      }
+//---------------Bet Method---------------------------		
+		public void playerBet(Player p) {
+			if(p.validBet == true) {
+				p.raise(currentCallAmount);
+				if(currentCallAmount == 0) {
+					System.out.println("You bet $"+ 5);
+				}else {
+					System.out.println("You bet $"+ (5+currentCallAmount));
+				}
+				pot += 5+currentCallAmount;
+				currentCallAmount = 5+currentCallAmount;
+			}else {
+				p.a.setBalance(0);
+				pot += p.a.getBalance();
+			}
+			if(round < 3) {
+				round++;
+			}
+			else {
+				currentCallAmount = 0;
+				round = 1;
+			}
+			System.out.println();
+			System.out.println("--------------Next Player--------------");
+			System.out.println();
+		}
+//---------------Call Method---------------------------
+		public void playerCall(Player p) {
+			if(currentCallAmount == 0) {
+				System.out.println("You check");
+				
+			}else if(p.validBet == true) {
+				p.call(currentCallAmount);
+				pot += currentCallAmount;
+				System.out.println("You call $"+ currentCallAmount);
+				
+			}else {
+				p.a.getBalance();
+				pot += p.a.getBalance();
+			}
+			if(round < 3) {
+				round++;
+			}
+			else {
+				currentCallAmount = 0;
+				round = 1;
+			}
+			System.out.println();
+			System.out.println("--------------Next Player--------------");
+			System.out.println();
+		}
+//---------------Fold Method---------------------------
+		public void playerFold(Player p) {
+			p.fold();
+			p.isActive = false;
+			System.out.println(p.name+"'s Folds");
+			if(round < 3) {
+				round++;
+			}
+			else {
+				currentCallAmount = 0;
+				round = 1;
+			}
+			System.out.println();
+			System.out.println("--------------Next Player--------------");
+			System.out.println();
+		}
+
+	//Process round for each player per turn
+		public void processRound(Player p) {
+			for(Player c: player) {
+				if(c.isActive == false) {
+					foldCount++;
+				}
+			}
+			if(foldCount == player.size()-1 ) {
+				defaultWin = true;
+				defaultWinner();
+			}
+			foldCount = 0;
+
+			if(p.isActive == true ) {
+				
+				
+				System.out.println("Turn: "+ turn +"          Player: "+ p.name);
+				System.out.println("Account: $"+ p.a.getBalance() + "      Pot: $"+ pot );
+
+				System.out.println("                  CurrCall: $"+ currentCallAmount );
+				System.out.println();
+				System.out.println("Your cards:");
+				p.playerHand.readThrough();
+				if((turn == 1 && pot == 0)) {
+					System.out.println("Options:(1)Bet  (3)Fold");
+				}else if(round == 3) {
+					System.out.println("Options:(2)Call  (3)Fold");
+				}
+				else {
+					System.out.println("Options:(1)Bet  (2)Call  (3)Fold");
+				}
+			/*	int r = s.nextInt();
+				switch(r) {
+					case 1: 
+						playerBet(p);
+						break;
+					
+					case 2: 
+						playerCall(p);
+						break;
+						
+					case 3: 
+						p.fold();
+						p.isActive = false;
+						System.out.println("You Fold");
+						break;
+						
+					default:
+
+					}
+					*/
+
+				System.out.println();
+			}
+			//Check if any players folded one more time
+			for(Player c: player) {
+				if(c.isActive == false) {
+					foldCount++;
+				}
+			}
+			if(foldCount == player.size()-1) {
+				defaultWin = true;
+				defaultWinner();
+			}
+			foldCount = 0;
+			
+		}
+		public void checkAccount() {
+			int size = player.size();
+			for (int i = size - 1; i >= 0; i--) {
+			    if(player.get(i).a.getBalance() <= 0){
+			    	
+			    	System.out.println("Player " + player.get(i).name+" Left");
+			    	player.remove(i);
+					
+			    }
+			}
+		}
+	// Checks the card ranks and determines the winner
+		public void determineWinner(){
+			int rank = 0;
+			int loop = 1;
+			String winner = "";
+			for(Player p: player) {
+				if(p.isActive) {
+					p.playerHand.setRanking();
+				}
+			}
+
+			for(Player p: player) {
+				for(Player c: player) {
+					if(c.playerHand.handRank >= p.playerHand.handRank && p.name != c.name) {
+						c.isWinner = true;
+						p.isWinner = false;
+						
+					}
+				}
+				
+			}
+			int winners= 0;
+			for(Player p: player) {
+
+				if(p.isWinner == true) {
+					winners++;
+				}
+			p.fold();
+		}
+			int newpot = pot / winners;
+			for(Player p: player) {
+
+					if(p.isWinner == true) {
+						System.out.println("-------------------");
+						System.out.println("Winner is "+ p.name);
+						System.out.println(p.name+ " Wins $"+ newpot);
+						System.out.println("-------------------");
+						p.a.setBalance(p.a.getBalance() + newpot);
+					}
+				p.fold();
+			}
+
+			pot = 0;
+			
+			
+			turn = 1;
+			for(Player p: player) {
+				p.isActive = true;
+				p.isWinner = false;
+				
+			}
+			createHands();
+			newDeck();
+			foldCount = 0;
+			defaultWin = false;
+			System.out.println("--------");
+			System.out.println("New Turn");
+			System.out.println("--------");
+		
+		}
+		
+	//If all other players fold, the default winner wins the pot
+		public void defaultWinner() {
+			for(Player p: player) {
+				for(Player c: player) {
+					if(c.isActive == false && p.isActive == true ) {
+						p.a.setBalance(p.a.getBalance() + pot);
+						System.out.println(p.name + "**WON**");
+						p.fold();
+					}
+				}
+				
+			}
+		pot = 0;
+		
+		turn = 1;
+		createHands();
+		foldCount = 0;
+		defaultWin = false;
+		newDeck();
+		System.out.println("--------");
+		System.out.println("New Turn");
+		System.out.println("--------");
+		}
+		
+			
+	// Creates a new deck for the game when cards run low
+		public void newDeck() {
+			deck = new PokerDeck();
+			deck.shuffle();
+		}
+		public void createHands() {
+			
+			for(Player p: player) {	
+				ArrayList<Card> cards = new ArrayList<Card>();
+				int i = 0; 
+				while(i<5) {
+					cards.add(deck.draw());
+					i++;
+				}
+				p.playerHand.addToHand(cards);
+				p.isActive = true;
+			}
+		
+		}
 
 
 
 }
+
