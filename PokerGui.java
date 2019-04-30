@@ -12,19 +12,22 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
  
 public class PokerGui extends Application {
+	
+	public static ArrayList<String> names = new ArrayList();
+	
     public static void main(String[] args) {
-        launch(args);
+        
+		for(int i = 0; i < args.length; i++)
+			names.add(args[i]);
+					
+		launch(args);
+		
+		
     }
     public int p = 0;	
-    @Override
+    
+	@Override
     public void start(Stage primaryStage)throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-
-    	ArrayList<String> names = new ArrayList();
-    	boolean condition = true;
-    	
-    	names.add("John");
-    	names.add("James");
-    	names.add("Jane");
     	
     	Server test = new Server(names);
     	test.processRound(test.player.get(p));	
