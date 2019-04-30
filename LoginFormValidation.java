@@ -1,5 +1,5 @@
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -9,6 +9,7 @@ public class LoginFormValidation extends Observable implements FormValidation {
     String[] names = new String[5];
 
     ArrayList<TextField> textFields = new ArrayList<>();
+	Button exitButton;
     Scene scene = null;
 
     public void setChanged(){
@@ -29,6 +30,9 @@ public class LoginFormValidation extends Observable implements FormValidation {
                 System.out.println(e.getMessage());
             }
         }
+		
+		exitButton = (Button) s.lookup("#joinButton");
+		
     }
 
     public boolean validate(){
@@ -46,6 +50,7 @@ public class LoginFormValidation extends Observable implements FormValidation {
         if(counter >=2){
             this.setChanged();
             this.notifyObservers(names);
+			exitButton.setDisable(true);
         }
 
 
