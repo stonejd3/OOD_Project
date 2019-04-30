@@ -9,6 +9,7 @@ public class Hand{
     }
     
     public void addToHand(ArrayList<Card> drawn){
+        hand.clear();
         int test = drawn.size();
         for(int i = 0; i<test; i++){
             hand.add(drawn.get(i));
