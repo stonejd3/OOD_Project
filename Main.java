@@ -26,7 +26,6 @@ public class Main extends Application implements Observer {
                         names.add(s[i]);
                     }
                 try {
-                    
 					startGame(new Stage());
 
                 } catch(Exception e){
@@ -74,10 +73,13 @@ public class Main extends Application implements Observer {
     	test.defaultWin = false;
 
         primaryStage.setTitle("GuiTest");
+	HBox hbox2 = new HBox();
         Label label1 = new Label("Name: "+test.player.get(p).name);
         Label label2 = new Label("Turn: "+test.turn);
         Label label3 = new Label("Pot: "+test.pot);
         Label label4 = new Label("Account: "+test.player.get(p).a.getBalance());
+		hbox2.getChildren().clear();
+		hbox2.getChildren().addAll(setCards(test.player.get(p)));			
         Button btn = new Button();
         btn.setText("Bet'");
         btn.setLayoutX(100);
@@ -132,7 +134,10 @@ public class Main extends Application implements Observer {
             		label2.setText("Turn: "+test.turn);
             		label3.setText("Pot: "+test.pot);
             		label4.setText("Account: "+test.player.get(p).a.getBalance());
-            	}
+            	
+					hbox2.getChildren().clear();
+					hbox2.getChildren().addAll(setCards(test.player.get(p)));					
+				}
                 
                
             }
@@ -176,6 +181,10 @@ public class Main extends Application implements Observer {
                 	label2.setText("Turn: "+test.turn);
                 	label3.setText("Pot: "+test.pot);
                 	label4.setText("Account: "+test.player.get(p).a.getBalance());
+					
+					hbox2.getChildren().clear();
+					hbox2.getChildren().addAll(setCards(test.player.get(p)));	
+					
         		}
         	}
         });
@@ -224,6 +233,11 @@ public class Main extends Application implements Observer {
         			label2.setText("Turn: "+test.turn);
         			label3.setText("Pot: "+test.pot);
         			label4.setText("Account: "+test.player.get(p).a.getBalance());
+					
+					hbox2.getChildren().clear();
+					hbox2.getChildren().addAll(setCards(test.player.get(p)));	
+					
+					
         		}
         	}
         });
@@ -232,17 +246,25 @@ public class Main extends Application implements Observer {
         
         HBox hbox = new HBox(btn, btn2, btn3,label1,label2,label3,label4);
         hbox.setSpacing(10);
-
-        Scene scene = new Scene(hbox, 500, 100);
+		
+		
+		
+		VBox vbox = new VBox(hbox2, hbox);
+		
+        Scene scene = new Scene(vbox, 500, 100);
         
         primaryStage.setScene(scene);
         primaryStage.show();
-       // StackPane root = new StackPane();
-      //  root.getChildren().add(btn);
-      //  root.getChildren().add(btn2);
-      //  root.getChildren().add(btn3);
-      //  primaryStage.setScene(new Scene(root, 300, 250));
-      //  primaryStage.show();
     }	
 
+	    public static ArrayList<ImageView> setCards(Player p){
+
+		ArrayList<ImageView> imageViews = new ArrayList<>();
+        for(Card c : p.playerHand.hand) {
+            String str = "images/" + c.suit.toString().toUpperCase() + "_" + c.name.toUpperCase() + ".PNG";
+            imageViews.add(new ImageView(new Image(str)));
+        }
+		return imageViews;
+    }
+	
 }
