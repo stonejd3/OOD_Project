@@ -122,8 +122,9 @@ public class Server {
 				
 			}else if(p.validBet == true) {
 				p.call(currentCallAmount);
-				pot += currentCallAmount;
-				System.out.println("You call $"+ currentCallAmount);
+				int add = p.returnCallDifference(currentCallAmount);
+				pot += add;
+				System.out.println("You call $"+ add);
 				updateLog("Previous Player Called");
 				
 			}else {
