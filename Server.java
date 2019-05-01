@@ -33,15 +33,27 @@ public class Server {
 	
 	public int currentCallAmount = 0;
 	
+	public DeckFactory df;
+	
+	public int roundsize;
+	
 		
 	//----------------------------------Individual Methods--------------------------------------------------------
 		
 		
-		public Server(ArrayList<String> names) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+		public Server(ArrayList<String> names, String decktype) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
 		
-			
-			DeckFactory df =  DeckFactory.getBuilder();
+			roundsize = (names.size() * 3);
+			df =  DeckFactory.getBuilder();
 			String deckClass = "Poker";
+			if(decktype.toLowerCase().equals("poker")){
+			    deckClass = "Poker";
+			}else if(decktype.toLowerCase().equals("french")){
+			    deckClass = "Poker";
+			}else if(decktype.toLowerCase().equals("spanish")){
+			    deckClass = "Spanish";
+			}
+			
 			df.setClass(deckClass);
 			deck = df.buildDeck();
 
@@ -90,12 +102,12 @@ public class Server {
 				p.a.setBalance(0);
 				pot += p.a.getBalance();
 			}
-			if(round < 3) {
+			if(round < roundsize) {
 				round++;
 			}
 			else {
 				currentCallAmount = 0;
-				round = 1;
+				round = 0;
 			}
 			System.out.println();
 			System.out.println("--------------Next Player--------------");
@@ -118,7 +130,7 @@ public class Server {
 				p.a.getBalance();
 				pot += p.a.getBalance();
 			}
-			if(round < 3) {
+			if(round < roundsize) {
 				round++;
 			}
 			else {
@@ -149,7 +161,7 @@ public class Server {
 		}
 
 	//Process round for each player per turn
-		public void processRound(Player p) {
+		public void processRound(Player p) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
 			for(Player c: player) {
 				if(c.isActive == false) {
 					foldCount++;
@@ -185,6 +197,7 @@ public class Server {
 			for(Player c: player) {
 				if(c.isActive == false) {
 					foldCount++;
+					roundsize = roundsize-3;
 				}
 			}
 			if(foldCount == player.size()-1) {
@@ -207,7 +220,7 @@ public class Server {
 			}
 		}
 	// Checks the card ranks and determines the winner
-		public void determineWinner(){
+		public void determineWinner() throws InstantiationException, IllegalAccessException, ClassNotFoundException{
 			int rank = 0;
 			int loop = 1;
 			String winner = "";
@@ -269,7 +282,7 @@ public class Server {
 		}
 		
 	//If all other players fold, the default winner wins the pot
-		public void defaultWinner() {
+		public void defaultWinner() throws InstantiationException, IllegalAccessException, ClassNotFoundException{
 			for(Player p: player) {
 				for(Player c: player) {
 					if(c.isActive == false && p.isActive == true ) {
@@ -295,8 +308,8 @@ public class Server {
 		
 			
 	// Creates a new deck for the game when cards run low
-		public void newDeck() {
-			deck = new PokerDeck();
+		public void newDeck() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+			deck = df.buildDeck();
 			deck.shuffle();
 		}
 		public void createHands() {

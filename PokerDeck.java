@@ -1,8 +1,3 @@
-/*
- * the basic deck, it uses high ace
- * this was done for no other reason
- * than just being the main deck
- */
 import java.util.*;
 public class PokerDeck implements Deck
 {
@@ -25,22 +20,18 @@ public class PokerDeck implements Deck
             }
         }
     }
-    
     public void readThrough(){//created only to test
         for(int i = 0; i < deck.size(); i++){
             System.out.println(deck.get(i).showPokercard());
         }
         System.out.println();
     }
-    
     public void shuffle(){
         Collections.shuffle(deck);
     }
-    
     public Card draw(){
         return deck.remove(0);
     }
-    
     public Card drawTester(int i){	
         return deck.remove(i);	
     }

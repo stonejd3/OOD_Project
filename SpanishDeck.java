@@ -10,8 +10,6 @@ public class SpanishDeck implements Deck{
         //used arrays and arraylist so that it would be easier
         Card.Suit currentSuit;
         Card currentCard;
-        //do this twice
-        
         for(int i = 0; i<4; i++){
             currentSuit = suits.get(i);
             for(int y = 0; y<13;y++){
@@ -21,18 +19,15 @@ public class SpanishDeck implements Deck{
         }
         
     }
-    
     public void readThrough(){//created only to test
         for(int i = 0; i < deck.size(); i++){
             System.out.println(deck.get(i).showPokercard());
         }
         System.out.println();
     }
-    
     public void shuffle(){
         Collections.shuffle(deck);
     }
-    
     public Card draw(){
         return deck.remove(0);
     }
