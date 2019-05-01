@@ -29,6 +29,8 @@ public class Server {
 	
 	public Deck deck;
 	
+	public String log = "";
+	
 	public int currentCallAmount = 0;
 	
 		
@@ -62,9 +64,17 @@ public class Server {
 			System.out.println();
 			System.out.println("----------");
 			System.out.println("Begin Game");
+			updateLog("Begin Game");
 			System.out.println("----------");
 				
 	      }
+		public String getLog() {
+			return log;
+		}
+			
+		public void updateLog(String msg) {
+			log = msg;
+		}
 //---------------Bet Method---------------------------		
 		public void playerBet(Player p) {
 			if(p.validBet == true) {
@@ -89,17 +99,20 @@ public class Server {
 			}
 			System.out.println();
 			System.out.println("--------------Next Player--------------");
+			updateLog("Previous Player Bet");
 			System.out.println();
 		}
 //---------------Call Method---------------------------
 		public void playerCall(Player p) {
 			if(currentCallAmount == 0) {
 				System.out.println("You check");
+				updateLog("Previous Player Checked");
 				
 			}else if(p.validBet == true) {
 				p.call(currentCallAmount);
 				pot += currentCallAmount;
 				System.out.println("You call $"+ currentCallAmount);
+				updateLog("Previous Player Called");
 				
 			}else {
 				p.a.getBalance();
@@ -114,6 +127,7 @@ public class Server {
 			}
 			System.out.println();
 			System.out.println("--------------Next Player--------------");
+			
 			System.out.println();
 		}
 //---------------Fold Method---------------------------
@@ -121,6 +135,7 @@ public class Server {
 			p.fold();
 			p.isActive = false;
 			System.out.println(p.name+"'s Folds");
+			updateLog("Previous Player Folds");
 			if(round < 3) {
 				round++;
 			}
@@ -164,27 +179,6 @@ public class Server {
 				else {
 					System.out.println("Options:(1)Bet  (2)Call  (3)Fold");
 				}
-			/*	int r = s.nextInt();
-				switch(r) {
-					case 1: 
-						playerBet(p);
-						break;
-					
-					case 2: 
-						playerCall(p);
-						break;
-						
-					case 3: 
-						p.fold();
-						p.isActive = false;
-						System.out.println("You Fold");
-						break;
-						
-					default:
-
-					}
-					*/
-
 				System.out.println();
 			}
 			//Check if any players folded one more time
@@ -206,6 +200,7 @@ public class Server {
 			    if(player.get(i).a.getBalance() <= 0){
 			    	
 			    	System.out.println("Player " + player.get(i).name+" Left");
+			    	updateLog("Player " + player.get(i).name+" Left");
 			    	player.remove(i);
 					
 			    }
@@ -246,6 +241,7 @@ public class Server {
 					if(p.isWinner == true) {
 						System.out.println("-------------------");
 						System.out.println("Winner is "+ p.name);
+					    updateLog("Winner is "+ p.name+" ,"+ p.name+ " Wins $"+ newpot);
 						System.out.println(p.name+ " Wins $"+ newpot);
 						System.out.println("-------------------");
 						p.a.setBalance(p.a.getBalance() + newpot);
@@ -279,6 +275,7 @@ public class Server {
 					if(c.isActive == false && p.isActive == true ) {
 						p.a.setBalance(p.a.getBalance() + pot);
 						System.out.println(p.name + "**WON**");
+						updateLog("Winner is "+ p.name);
 						p.fold();
 					}
 				}

@@ -2,6 +2,8 @@ import javafx.application.Application;
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+
 import java.util.*;
 import javafx.scene.image.*;
 import javafx.scene.control.*;
@@ -76,12 +78,15 @@ public class Main extends Application implements Observer {
 	HBox hbox2 = new HBox();
         Label label1 = new Label("Name: "+test.player.get(p).name);
         Label label2 = new Label("Turn: "+test.turn);
-        Label label3 = new Label("Pot: "+test.pot);
-        Label label4 = new Label("Account: "+test.player.get(p).a.getBalance());
+        Label label3 = new Label("Pot: $"+test.pot);
+        Label label4 = new Label("Account: $"+test.player.get(p).a.getBalance());
+        
+        Label log = new Label("Game Started");
+        
 		hbox2.getChildren().clear();
 		hbox2.getChildren().addAll(setCards(test.player.get(p)));			
         Button btn = new Button();
-        btn.setText("Bet'");
+        btn.setText("Bet");
         btn.setLayoutX(100);
         btn.setLayoutY(10);
         
@@ -95,6 +100,8 @@ public class Main extends Application implements Observer {
         btn3.setLayoutX(250);
         btn3.setLayoutY(50);
         
+        btn2.setVisible(false);
+        
         btn.setOnAction(new EventHandler<ActionEvent>() {
  //---------------Bet Method------------------------------
             @Override
@@ -104,6 +111,8 @@ public class Main extends Application implements Observer {
 
             			test.turn = 5;
             			System.out.println("Game Over");
+            			test.updateLog("Game Over");
+            			log.setText(test.getLog());
             		}
 
             		System.out.println("Bet");
@@ -114,6 +123,13 @@ public class Main extends Application implements Observer {
             			test.turn++;
             		}else {
             			p++;	
+            		}
+            		if(test.player.get(p).isActive == false) {
+            			p++;
+            			if (p >= test.player.size()-1) {
+                			p = 0;
+                			test.turn++;
+            			}
             		}
             		if(test.turn >3) {
             			test.determineWinner();
@@ -127,13 +143,22 @@ public class Main extends Application implements Observer {
             				btn2.setVisible(false);
             				btn3.setVisible(false);
             				test.gameover = true;
+            				test.updateLog("Game Over");
+                			log.setText(test.getLog());
             			}
             		}
+            		if(test.currentCallAmount == 0|| test.pot == 0) {
+            			btn2.setVisible(false);
+            		}else {
+            			btn2.setVisible(true);
+            		}
+            		
             		test.processRound(test.player.get(p));
             		label1.setText("Name: "+test.player.get(p).name);
             		label2.setText("Turn: "+test.turn);
-            		label3.setText("Pot: "+test.pot);
-            		label4.setText("Account: "+test.player.get(p).a.getBalance());
+            		label3.setText("Pot: $"+test.pot);
+            		label4.setText("Account: $"+test.player.get(p).a.getBalance());
+            		log.setText(test.getLog());
             	
 					hbox2.getChildren().clear();
 					hbox2.getChildren().addAll(setCards(test.player.get(p)));					
@@ -153,6 +178,8 @@ public class Main extends Application implements Observer {
 
         				test.turn = 5;
         				System.out.println("Game Over");
+        				test.updateLog("Game Over");
+            			log.setText(test.getLog());
         			}
         			System.out.println("Call");
                 
@@ -162,7 +189,15 @@ public class Main extends Application implements Observer {
                 		test.turn++;
                 	}else {
                 		p++;	
-                	}if(test.turn > 3) {
+                	}
+                	if(test.player.get(p).isActive == false) {
+            			p++;
+            			if (p >= test.player.size()-1) {
+                			p = 0;
+                			test.turn++;
+            			}
+            		}
+                	if(test.turn > 3) {
                 		test.determineWinner();
                 		test.turn = 1;
                 		test.checkAccount();
@@ -174,13 +209,22 @@ public class Main extends Application implements Observer {
             				btn2.setVisible(false);
             				btn3.setVisible(false);
             				test.gameover = true;
+            				test.updateLog("Game Over");
+                			log.setText(test.getLog());
                 		}
                 	}
+                	if(test.currentCallAmount == 0|| test.pot == 0) {
+            			btn2.setVisible(false);
+            		}else {
+            			btn2.setVisible(true);
+            		}
+                	
                 	test.processRound(test.player.get(p));
                 	label1.setText("Name: "+test.player.get(p).name);
                 	label2.setText("Turn: "+test.turn);
-                	label3.setText("Pot: "+test.pot);
-                	label4.setText("Account: "+test.player.get(p).a.getBalance());
+                	label3.setText("Pot: $"+test.pot);
+                	label4.setText("Account: $"+test.player.get(p).a.getBalance());
+                	log.setText(test.getLog());
 					
 					hbox2.getChildren().clear();
 					hbox2.getChildren().addAll(setCards(test.player.get(p)));	
@@ -214,6 +258,13 @@ public class Main extends Application implements Observer {
         			}else {
         				p++;	
         			}
+        			if(test.player.get(p).isActive == false) {
+            			p++;
+            			if (p >= test.player.size()-1) {
+                			p = 0;
+                			test.turn++;
+            			}
+            		}
         			if(test.turn > 3) {
         				test.determineWinner();
         				test.turn = 1;
@@ -226,13 +277,21 @@ public class Main extends Application implements Observer {
             				btn2.setVisible(false);
             				btn3.setVisible(false);
             				test.gameover = true;
+            				test.updateLog("Game Over");
+                			log.setText(test.getLog());
         				}
         			}
+        			if(test.currentCallAmount == 0 || test.pot == 0) {
+            			btn2.setVisible(false);
+            		}else {
+            			btn2.setVisible(true);
+            		}
         			test.processRound(test.player.get(p));
         			label1.setText("Name: "+test.player.get(p).name);
         			label2.setText("Turn: "+test.turn);
-        			label3.setText("Pot: "+test.pot);
-        			label4.setText("Account: "+test.player.get(p).a.getBalance());
+        			label3.setText("Pot: $"+test.pot);
+        			label4.setText("Account: $"+test.player.get(p).a.getBalance());
+        			log.setText(test.getLog());
 					
 					hbox2.getChildren().clear();
 					hbox2.getChildren().addAll(setCards(test.player.get(p)));	
@@ -242,16 +301,22 @@ public class Main extends Application implements Observer {
         	}
         });
         
-        
+        label1.setFont(Font.font ("Verdana", 20));
+        label2.setFont(Font.font ("Verdana", 20));
+        label3.setFont(Font.font ("Verdana", 20));
+        label4.setFont(Font.font ("Verdana", 20));
+        log.setFont(Font.font ("Verdana", 20));
         
         HBox hbox = new HBox(btn, btn2, btn3,label1,label2,label3,label4);
         hbox.setSpacing(10);
 		
+        HBox hbox3 = new HBox(log);
+		
+		VBox vbox = new VBox(hbox2, hbox, hbox3);
+		vbox.setSpacing(10);
 		
 		
-		VBox vbox = new VBox(hbox2, hbox);
-		
-        Scene scene = new Scene(vbox, 500, 100);
+        Scene scene = new Scene(vbox, 955, 350);
         
         primaryStage.setScene(scene);
         primaryStage.show();
