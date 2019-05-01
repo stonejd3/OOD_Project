@@ -12,27 +12,29 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
  
 public class PokerGui extends Application {
-	
-	public static ArrayList<String> names = new ArrayList();
-	
+    
+    public static ArrayList<String> names = new ArrayList();
+    public static String deckType;
     public static void main(String[] args) {
         
-		for(int i = 0; i < args.length; i++)
-			names.add(args[i]);
-					
-		launch(args);
-		
-		
+        for(int i = 0; i < args.length-1; i++){
+            names.add(args[i]);
+        }
+        int i = (args.length-1);
+        deckType = args[i];
+        launch(args);
+        
+        
     }
-    public int p = 0;	
+    public int p = 0;   
     
-	@Override
+    @Override
     public void start(Stage primaryStage)throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-    	
-    	Server test = new Server(names);
-    	test.processRound(test.player.get(p));	
-    	
-    	test.defaultWin = false;
+        
+        Server test = new Server(names,deckType);
+        test.processRound(test.player.get(p));  
+        
+        test.defaultWin = false;
 
         primaryStage.setTitle("GuiTest");
         Label label1 = new Label("Name: "+test.player.get(p).name);
@@ -58,87 +60,95 @@ public class PokerGui extends Application {
  //---------------Bet Method------------------------------
             @Override
             public void handle(ActionEvent event) {
-            	if(test.gameover == false) {
-            		if(test.player.size() == 1) {
+                if(test.gameover == false) {
+                    if(test.player.size() == 1) {
 
-            			test.turn = 5;
-            			System.out.println("Game Over");
-            		}
+                        test.turn = 5;
+                        System.out.println("Game Over");
+                    }
 
-            		System.out.println("Bet");
+                    System.out.println("Bet");
                 
-            		test.playerBet(test.player.get(p));
-            		if (p >= test.player.size()-1) {
-            			p = 0;
-            			test.turn++;
-            		}else {
-            			p++;	
-            		}
-            		if(test.turn >3) {
-            			test.determineWinner();
-            			test.checkAccount();
-            			test.turn = 1;
-            			if(test.player.size() == 1) {
+                    test.playerBet(test.player.get(p));
+                    if (p >= test.player.size()-1) {
+                        p = 0;
+                        test.turn++;
+                    }else {
+                        p++;    
+                    }
+                    if(test.turn >3) {
+                        try{
+                        test.determineWinner();
+                        } catch (Exception e) {}
+                        test.checkAccount();
+                        test.turn = 1;
+                        if(test.player.size() == 1) {
 
-            				test.turn = 5;
-            				System.out.println("Game Over");
-            				btn.setVisible(false);
-            				btn2.setVisible(false);
-            				btn3.setVisible(false);
-            				test.gameover = true;
-            			}
-            		}
-            		test.processRound(test.player.get(p));
-            		label1.setText("Name: "+test.player.get(p).name);
-            		label2.setText("Turn: "+test.turn);
-            		label3.setText("Pot: "+test.pot);
-            		label4.setText("Account: "+test.player.get(p).a.getBalance());
-            	}
+                            test.turn = 5;
+                            System.out.println("Game Over");
+                            btn.setVisible(false);
+                            btn2.setVisible(false);
+                            btn3.setVisible(false);
+                            test.gameover = true;
+                        }
+                    }
+                    try{
+                    test.processRound(test.player.get(p));
+                    } catch (Exception e) {}
+                    label1.setText("Name: "+test.player.get(p).name);
+                    label2.setText("Turn: "+test.turn);
+                    label3.setText("Pot: "+test.pot);
+                    label4.setText("Account: "+test.player.get(p).a.getBalance());
+                }
                 
                
             }
         });
         
         btn2.setOnAction(new EventHandler<ActionEvent>() {
-//-------------------------Call Method---------------------------------------------------------------       	
-        	
-        	
-        	public void handle(ActionEvent event) {
-        		if(test.gameover == false) {
-        			if(test.player.size() == 1) {
+//-------------------------Call Method---------------------------------------------------------------           
+            
+            
+            public void handle(ActionEvent event) {
+                if(test.gameover == false) {
+                    if(test.player.size() == 1) {
 
-        				test.turn = 5;
-        				System.out.println("Game Over");
-        			}
-        			System.out.println("Call");
+                        test.turn = 5;
+                        System.out.println("Game Over");
+                    }
+                    System.out.println("Call");
                 
-                	test.playerCall(test.player.get(p));
-                	if (p >= test.player.size()-1) {
-                		p =0;
-                		test.turn++;
-                	}else {
-                		p++;	
-                	}if(test.turn > 3) {
-                		test.determineWinner();
-                		test.turn = 1;
-                		test.checkAccount();
-                		if(test.player.size() == 1) {
+                    test.playerCall(test.player.get(p));
+                    if (p >= test.player.size()-1) {
+                        p =0;
+                        test.turn++;
+                    }else {
+                        p++;    
+                    }if(test.turn > 3) {
+                        try{
+                        test.determineWinner();
+                        } catch (Exception e) {}
+                        test.turn = 1;
+                        test.checkAccount();
+                        if(test.player.size() == 1) {
 
-                			test.turn = 5;
-                			System.out.println("Game Over");
-            				btn.setVisible(false);
-            				btn2.setVisible(false);
-            				btn3.setVisible(false);
-            				test.gameover = true;
-                		}
-                	}
-                	test.processRound(test.player.get(p));
-                	label1.setText("Name: "+test.player.get(p).name);
-                	label2.setText("Turn: "+test.turn);
-                	label3.setText("Pot: "+test.pot);
-                	label4.setText("Account: "+test.player.get(p).a.getBalance());
-        		}
-        	}
+                            test.turn = 5;
+                            System.out.println("Game Over");
+                            btn.setVisible(false);
+                            btn2.setVisible(false);
+                            btn3.setVisible(false);
+                            test.gameover = true;
+                        }
+                    }
+                    try{
+                    test.processRound(test.player.get(p));
+                    } catch (Exception e) {}
+                    label1.setText("Name: "+test.player.get(p).name);
+                    label2.setText("Turn: "+test.turn);
+                    label3.setText("Pot: "+test.pot);
+                    label4.setText("Account: "+test.player.get(p).a.getBalance());
+                }
+            }
         });
         
         
@@ -146,31 +156,33 @@ public class PokerGui extends Application {
         
 
         btn3.setOnAction(new EventHandler<ActionEvent>() {
- //-------------------Fold Method---------------------------------------      	
-        	
-        	
-        	public void handle(ActionEvent event) {
-        		if(test.gameover == false) {
-        			if(test.player.size() == 1) {
+ //-------------------Fold Method---------------------------------------        
+            
+            
+            public void handle(ActionEvent event) {
+                if(test.gameover == false) {
+                    if(test.player.size() == 1) {
 
-        				test.turn = 5;
-        				System.out.println("Game Over");
-        			}
-        			System.out.println("Fold");
+                        test.turn = 5;
+                        System.out.println("Game Over");
+                    }
+                    System.out.println("Fold");
                 
-        			test.playerFold(test.player.get(p));
+                    test.playerFold(test.player.get(p));
                 
-        			if (p >= test.player.size()-1) {
-        				p =0;
-        				test.turn++;
-        			}else {
-        				p++;	
-        			}
-        			if(test.turn > 3) {
-        				test.determineWinner();
-        				test.turn = 1;
-        				test.checkAccount();
-        				if(test.player.size() == 1) {
+                    if (p >= test.player.size()-1) {
+                        p =0;
+                        test.turn++;
+                    }else {
+                        p++;    
+                    }
+                    if(test.turn > 3) {
+                        try{
+                        test.determineWinner();
+                        } catch (Exception e) {}
+                        test.turn = 1;
+                        test.checkAccount();
+                        if(test.player.size() == 1) {
 
         					test.turn = 5;
         					System.out.println("Game Over");
@@ -180,7 +192,9 @@ public class PokerGui extends Application {
             				test.gameover = true;
         				}
         			}
+        			try{
         			test.processRound(test.player.get(p));
+        			} catch (Exception e) {}
         			label1.setText("Name: "+test.player.get(p).name);
         			label2.setText("Turn: "+test.turn);
         			label3.setText("Pot: "+test.pot);

@@ -16,7 +16,8 @@ public class DeckFactory
         System.setProperty("DeckType", chosen + "Deck");
     }
     
-    public synchronized  Deck buildDeck() throws InstantiationException,IllegalAccessException, ClassNotFoundException{
+    public synchronized  Deck buildDeck() throws InstantiationException,
+    IllegalAccessException, ClassNotFoundException{
         String pc = System.getProperty("DeckType");
         d = (Deck) Class.forName(pc).newInstance();
         return d;
