@@ -37,11 +37,10 @@ public class Server {
 	//----------------------------------Individual Methods--------------------------------------------------------
 		
 		
-		public Server(ArrayList<String> names) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+		public Server(ArrayList<String> names, String deckClass) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
 		
 			
 			DeckFactory df =  DeckFactory.getBuilder();
-			String deckClass = "Poker";
 			df.setClass(deckClass);
 			deck = df.buildDeck();
 

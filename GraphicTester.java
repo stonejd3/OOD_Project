@@ -11,8 +11,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
  
-public class GraphicTester extends Application {
-    public static void main(String[] args) {
+public class GraphicTester /*extends Application*/ {
+    /*public static void main(String[] args) {
         launch(args);
     }
     public int p = 0;	
@@ -31,37 +31,7 @@ public class GraphicTester extends Application {
     	test.processRound(test.player.get(p));	
     	
     	test.defaultWin = false;
-    /*	while(condition == true) {
-    		while(test.turn <= 3) {
-    				
-    			for(Player p: test.player) {
-    				if(test.player.size() == 1) {
-    					condition = false;
-    					test.turn = 5;
-    					System.out.println("Game Over, Player Wins: "+p.name );
-    				}else{
-    				//--------------If all other players fold, default winner-----------------------------
-    				// Start New Round	
-    					test.processRound(p);
-    				}
-    			}
-    			if(condition == true) {
-    				test.currentPot = 0;
-    				test.currentCallAmount = 0;
-    				test.turn++;	
-    				if(test.turn > 3 ) {
 
-    					test.determineWinner();
-    					test.turn = 1;
-    				}else if(test.defaultWin == true) {
-    					test.defaultWinner();
-    					test.turn = 1;
-    				}
-    				test.checkAccount();
-    			}
-    		}
-    	}
-    	*/
         primaryStage.setTitle("GuiTest");
         Label label1 = new Label("Name:"+test.player.get(p).name);
         Label label2 = new Label("Turn"+test.turn);
@@ -171,5 +141,5 @@ public class GraphicTester extends Application {
       //  root.getChildren().add(btn3);
       //  primaryStage.setScene(new Scene(root, 300, 250));
       //  primaryStage.show();
-    }
+    }*/
 }

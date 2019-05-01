@@ -11,9 +11,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
  
-public class PokerGui extends Application {
+public class PokerGui /*extends Application*/ {
 	
-	public static ArrayList<String> names = new ArrayList();
+	/*public static ArrayList<String> names = new ArrayList();
 	
     public static void main(String[] args) {
         
@@ -204,5 +204,5 @@ public class PokerGui extends Application {
       //  root.getChildren().add(btn3);
       //  primaryStage.setScene(new Scene(root, 300, 250));
       //  primaryStage.show();
-    }
+    }*/
 }
