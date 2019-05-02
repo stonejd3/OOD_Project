@@ -24,11 +24,12 @@ public class Main extends Application implements Observer {
         if(observable instanceof LoginFormValidation) {
             if (o instanceof String[]) {
                 String[] s = (String[]) o;
-                for (int i = 0; i < s.length; i++)
+                for (int i = 0; i < 5; i++)
                     if(s[i] != null){
                         names.add(s[i]);
                     }
                 try {
+                    deckType = s[5];
                     startGame(new Stage());
 
                 } catch(Exception e){

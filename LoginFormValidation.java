@@ -6,11 +6,12 @@ import java.util.Observable;
 public class LoginFormValidation extends Observable implements FormValidation {
 
     String[] inputs = {"#p1Name","#p2Name","#p3Name","#p4Name","#p5Name"};
-    String[] names = new String[5];
+    String[] names = new String[6];
 
     ArrayList<TextField> textFields = new ArrayList<>();
-	Button exitButton;
+	Button joinButton;
     Scene scene = null;
+    TextField deckType;
 
     public void setChanged(){
         super.setChanged();
@@ -25,13 +26,14 @@ public class LoginFormValidation extends Observable implements FormValidation {
         for(int i = 0; i < inputs.length; i++){
             try {
                 textFields.add((TextField) s.lookup(inputs[i]));
+                deckType = (TextField) s.lookup("#deckType");
             } catch(NullPointerException e){
                 System.out.println("Wrong inputs specified");
                 System.out.println(e.getMessage());
             }
         }
 		
-		exitButton = (Button) s.lookup("#joinButton");
+		joinButton = (Button) s.lookup("#joinButton");
 		
     }
 
@@ -48,9 +50,28 @@ public class LoginFormValidation extends Observable implements FormValidation {
         }
 
         if(counter >=2){
+
+            if(deckType.getText().equals("")){
+
+                deckType.setStyle("-fx-control-inner-background: red;");
+                return false;
+
+            } else if(deckType.getText().toLowerCase().contains("spanish")){
+
+                names[5] = "Spanish";
+
+            } else {
+
+                names[5] = "Poker";
+
+            }
+
+            System.out.println(names[5]);
+
             this.setChanged();
             this.notifyObservers(names);
-			exitButton.setDisable(true);
+			joinButton.setDisable(true);
+
         }
 
 
