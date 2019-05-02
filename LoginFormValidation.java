@@ -56,7 +56,7 @@ public class LoginFormValidation extends Observable implements FormValidation {
                 deckType.setStyle("-fx-control-inner-background: red;");
                 return false;
 
-            } else if(deckType.getText().contains("spanish")){
+            } else if(deckType.getText().toLowerCase().contains("spanish")){
 
                 names[5] = "Spanish";
 
