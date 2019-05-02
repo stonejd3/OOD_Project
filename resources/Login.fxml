@@ -24,8 +24,8 @@
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="102.0" />
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints maxHeight="229.0" minHeight="10.0" prefHeight="175.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="109.0" minHeight="0.0" prefHeight="54.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="229.0" minHeight="10.0" prefHeight="196.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="109.0" minHeight="0.0" prefHeight="33.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <GridPane.margin>
             <Insets top="30.0" />
@@ -118,6 +118,22 @@
                   <Insets right="15.0" top="125.0" />
                </GridPane.margin>
             </Label>
+            <TextField id="deckType" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
+               <font>
+                  <Font size="15.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets bottom="10.0" />
+               </GridPane.margin>
+            </TextField>
+            <Label text="Deck Type" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
+               <font>
+                  <Font size="15.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets bottom="15.0" />
+               </GridPane.margin>
+            </Label>
          </children>
       </GridPane>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Login to Game" wrappingWidth="157.33935546875" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
@@ -130,3 +146,5 @@
       </Text>
    </children>
 </GridPane>
+
+
