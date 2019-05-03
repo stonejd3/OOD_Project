@@ -1,35 +1,11 @@
-
 import java.util.*;
 import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-/**
- * The test class RankerTest.
- *
- * @author  (your name)
- * @version (a version number or a date)
- */
-public class RankerTest
-{
-    /**
-     * Default constructor for test class RankerTest
-     */
-    public RankerTest()
-    {
+public class RankerTest{
+    public RankerTest(){
     }
-    
-    /**
-     * Sets up the test fixture.
-     *
-     * Called before every test case method.
-     */
-    @Before
-    public void setUp()
-    {
-    }
-    
     @Test
     public void royalFlushIfCheck()throws InstantiationException,
     IllegalAccessException, ClassNotFoundException{
@@ -47,28 +23,22 @@ public class RankerTest
         Ranker rankCheck = new Ranker(checker);
         assert(rankCheck.rank == 20);
     }
-    
     @Test
     public void straightFlushIfCheck()throws InstantiationException,
     IllegalAccessException, ClassNotFoundException{
         Hand testhand = new Hand();
         DeckFactory df =  DeckFactory.getBuilder();
-        
         String deckClass = "Poker";
-        
         df.setClass(deckClass);
         Deck test = df.buildDeck();
-        
         ArrayList<Card> checker = new ArrayList<Card>();
         for(int i = 0; i < 5; i++){
             checker.add(test.draw());
         }
-        
         testhand.addToHand(checker);
         testhand.setRanking();
         assert(testhand.handRank == 19);
-    }
-    
+    }    
     @Test
     public void fourPairIfCheck()throws InstantiationException,
     IllegalAccessException, ClassNotFoundException{
@@ -88,8 +58,7 @@ public class RankerTest
         Ranker rankCheck = new Ranker(listOfCards);
         
         assert(rankCheck.rank == 18);
-    }
-    
+    }    
     @Test
     public void fullHouseIfCheck()throws InstantiationException,
     IllegalAccessException, ClassNotFoundException{
@@ -109,8 +78,7 @@ public class RankerTest
         Ranker rankCheck = new Ranker(listOfCards);
         
         assert(rankCheck.rank == 17);
-    }
-    
+    }    
     @Test
     public void flushIfCheck()throws InstantiationException,
     IllegalAccessException, ClassNotFoundException{
@@ -130,8 +98,7 @@ public class RankerTest
         Ranker rankCheck = new Ranker(listOfCards);
         
         assert(rankCheck.rank == 16);
-    }
-    
+    }    
     @Test
     public void threePairIfCheck()throws InstantiationException,
     IllegalAccessException, ClassNotFoundException{
@@ -149,10 +116,8 @@ public class RankerTest
         listOfCards.add(test.drawTester(8));
         listOfCards.get(3).showPokercard();
         Ranker rankCheck = new Ranker(listOfCards);
-        
         assert(rankCheck.rank == 13);
-    }
-    
+    }    
     @Test
     public void twoPairIfCheck()throws InstantiationException,
     IllegalAccessException, ClassNotFoundException{
@@ -173,7 +138,6 @@ public class RankerTest
         
         assert(rankCheck.rank == 12);
     }
-    
     @Test
     public void highCardIfCheck()throws InstantiationException,
     IllegalAccessException, ClassNotFoundException{
@@ -194,7 +158,6 @@ public class RankerTest
         
         assert(rankCheck.rank == 11);
     }
-    
     @Test
     public void doublePairIfCheck()throws InstantiationException,
     IllegalAccessException, ClassNotFoundException{
